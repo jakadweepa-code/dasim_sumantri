@@ -5,339 +5,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulasi Pilkades Karangsari 2026</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: Arial, sans-serif;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html {
+      width: 100%; height: 100%; font-family: Arial, sans-serif;
       background: linear-gradient(to bottom, #dbeafe, #eff6ff);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 10px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      overflow-x: hidden; padding: 10px;
     }
-
-    /* HEADER SURAT SUARA */
-    header {
-      text-align: center;
-      margin-bottom: 25px;
+    #konten-simulasi {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      justify-content: space-between; align-items: center; padding: 10px;
     }
-    .logo-kabupaten {
-      width: 70px;
-      height: auto;
-      margin-bottom: 8px;
+    header { text-align: center; margin-top: 5px; }
+    .logo-kabupaten { width: 50px; height: auto; margin-bottom: 3px; }
+    
+    /* PENGATURAN FORMAT HEADER BERBARIS */
+    header h1 { 
+      font-size: 1rem; 
+      font-weight: bold; 
+      color: #1e3a8a; 
+      line-height: 1.4; 
+      max-width: 1000px; 
     }
-    header h1 {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #1e3a8a;
-      letter-spacing: 0.5px;
-      line-height: 1.4;
-      max-width: 700px;
-    }
-
-    /* GRID KARTU KANDIDAT */
+    
     .surat-suara-container {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      flex-wrap: wrap;
-      margin-bottom: 30px;
-      width: 100%;
-      max-width: 750px;
+      display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+      width: 100%; max-width: 750px; margin: auto 0;
     }
+
     .card-kandidat {
-      background: white;
-      border: 3px solid #3b82f6;
-      border-radius: 8px;
-      padding: 15px;
-      width: 240px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: all 0.2s ease-in-out;
+      background: white; border: 3px solid #3b82f6; border-radius: 8px;
+      padding: 10px; width: 210px; text-align: center; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.2s ease-in-out;
     }
-    .card-kandidat:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3);
+    .card-kandidat:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3); }
+    .card-kandidat.selected { border-color: #ef4444; background-color: #fef2f2; }
+    
+    .nomor-urut {
+      font-size: 1rem; font-weight: bold; color: #1e3a8a; background-color: #dbeafe;
+      padding: 4px; border-radius: 4px; margin-bottom: 8px; border: 1px solid #93c5fd;
     }
-    .card-kandidat.selected {
-      border-color: #ef4444;
-      background-color: #fef2f2;
-    }
+
     .frame-foto {
       width: 100%;
-      height: 240px;
+      aspect-ratio: 3 / 4;
       border: 2px solid #1e3a8a;
       background-color: #ef4444;
       overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .frame-foto img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .nama-calon {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #1f2937;
-    }
-
-    /* TOMBOL UTAMA */
-    .btn-pilih-utama {
-      background-color: #ef4444;
-      color: white;
-      font-size: 1.2rem;
-      font-weight: bold;
-      padding: 14px 40px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
-      width: 100%;
-      max-width: 505px;
-      transition: background 0.2s;
-    }
-    .btn-pilih-utama:hover {
-      background-color: #dc2626;
-    }
-
-    /* POP-UP MODAL OVERLAY */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 1000;
-      padding: 15px;
-    }
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ISI POP-UP */
-    .modal-box {
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .modal-box h2 {
-      font-size: 1.2rem;
-      color: #1e3a8a;
       margin-bottom: 8px;
     }
-    .modal-box p {
-      font-size: 0.95rem;
-      color: #4b5563;
-      margin-bottom: 15px;
-    }
-    .modal-foto {
-      width: 140px;
-      height: 170px;
-      border: 2px solid #1e3a8a;
-      background-color: #ef4444;
-      margin: 0 auto 10px auto;
-      overflow: hidden;
-    }
-    .modal-foto img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .modal-nama {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #111827;
-      margin-bottom: 20px;
+    .frame-foto img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      object-position: top center;
     }
 
-    /* TOMBOL POP-UP */
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
-    .btn-ulangi {
-      background-color: #9ca3af;
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      flex: 1;
-    }
-    .btn-ulangi:hover {
-      background-color: #6b7280;
-    }
-    .btn-pilih-pop {
-      background-color: #16a34a;
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      flex: 1;
-    }
-    .btn-pilih-pop:hover {
-      background-color: #15803d;
-    }
-    .ceklis-icon {
-      font-size: 3.5rem;
-      color: #16a34a;
-      margin-bottom: 10px;
+    .nama-calon { font-size: 0.9rem; font-weight: bold; color: #1f2937; }
+    
+    .btn-pilih-utama {
+      background-color: #ef4444; color: white; font-size: 1.1rem; font-weight: bold;
+      padding: 12px; border: none; border-radius: 6px; cursor: pointer;
+      width: 100%; max-width: 500px; margin-bottom: 10px;
     }
 
-    /* DESAIN STRUK TANDA BUKTI CETAK */
-    #area-bukti {
-      display: none;
-      background: white;
-      border: 2px dashed #1e3a8a;
-      border-radius: 8px;
-      padding: 25px;
-      max-width: 450px;
-      width: 100%;
-      margin-top: 20px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
+      align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000;
     }
-    .bukti-header {
-      border-bottom: 2px solid #1e3a8a;
-      padding-bottom: 10px;
-      margin-bottom: 15px;
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      background: white; border-radius: 12px; padding: 20px; width: 100%; max-width: 380px; text-align: center;
     }
-    .bukti-header h2 {
-      font-size: 1.1rem;
-      color: #1e3a8a;
+    .modal-foto { 
+      width: 120px; aspect-ratio: 3 / 4; border: 2px solid #1e3a8a; 
+      margin: 0 auto 8px auto; overflow: hidden; background: #ef4444;
     }
-    .bukti-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 8px 0;
-      font-size: 0.9rem;
-      color: #374151;
-    }
-    .status-tercatat {
-      display: inline-block;
-      margin-top: 15px;
-      background-color: #dcfce7;
-      color: #15803d;
-      font-weight: bold;
-      padding: 6px 15px;
-      border-radius: 20px;
-      border: 1px solid #86efac;
-    }
-    .btn-cetak {
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 20px;
-      width: 100%;
-    }
-    .btn-cetak:hover {
-      background-color: #1d4ed8;
-    }
-    .btn-kembali-awal {
-      background-color: #6b7280;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 0.9rem;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
-    }
+    .modal-foto img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+    .modal-nama { font-size: 1rem; font-weight: bold; color: #111827; margin-bottom: 15px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+    .btn-ulangi { background-color: #9ca3af; color: white; border: none; padding: 8px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
+    .btn-pilih-pop { background-color: #16a34a; color: white; border: none; padding: 8px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
+    .ceklis-icon { font-size: 3rem; color: #16a34a; margin-bottom: 8px; }
 
-    /* KHUSUS SAAT DICETAK/PRINTER (Hanya Bukti Yang Dicetak) */
+    #area-bukti { display: none; }
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #area-bukti, #area-bukti * {
-        visibility: visible;
-      }
-      #area-bukti {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        border: none;
-        display: block !important;
-      }
-      .btn-cetak, .btn-kembali-awal {
-        display: none !important;
-      }
+      body * { visibility: hidden; }
+      #area-bukti, #area-bukti * { visibility: visible; }
+      #area-bukti { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background: white; padding: 20px; text-align: center; }
+      .bukti-header { border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; margin-bottom: 15px; }
+      .bukti-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 1rem; color: #000; }
+      .status-tercatat { margin-top: 20px; font-weight: bold; color: #15803d; font-size: 1.1rem; }
     }
   </style>
 </head>
 <body>
-
-  <!-- KONTEN UTAMA SIMULASI -->
-  <div id="konten-simulasi" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+  <div id="konten-simulasi">
     <header>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lambang_Kabupaten_Subang.png" alt="Logo Subang" class="logo-kabupaten" onerror="this.style.display='none'">
-      <h1>SIMULASI PEMILIHAN KEPALA DESA KARANGSARI KECAMATAN BINONG KABUPATEN SUBANG TAHUN 2026</h1>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lambang_Kabupaten_Subang.png" alt="Logo" class="logo-kabupaten" onerror="this.style.display='none'">
+      <!-- HEADER DENGAN GARIS BARU -->
+      <h1>
+        SIMULASI<br>
+        PEMILIHAN KEPALA DESA KARANGSARI<br>
+        KECAMATAN BINONG KABUPATEN SUBANG<br>
+        TAHUN 2026
+      </h1>
     </header>
 
     <main class="surat-suara-container">
       <!-- Kandidat 1 -->
       <div class="card-kandidat" id="card-1" onclick="pilihCard(1, 'Elan Suherlan', 'calon_1.jpg')">
-        <div class="frame-foto">
-          <img src="calon_1.jpg" alt="Foto Calon 01" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+01'">
-        </div>
-        <div class="nama-calon">01. Elan Suherlan</div>
+        <div class="nomor-urut">NO. 01</div>
+        <div class="frame-foto"><img src="calon_1.jpg" alt="Calon 01" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+01'"></div>
+        <div class="nama-calon">Elan Suherlan</div>
       </div>
-
       <!-- Kandidat 2 -->
       <div class="card-kandidat" id="card-2" onclick="pilihCard(2, 'Dasim Sumantri, SE', 'calon_2.jpg')">
-        <div class="frame-foto">
-          <img src="calon_2.jpg" alt="Foto Calon 02" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+02'">
-        </div>
-        <div class="nama-calon">02. Dasim Sumantri, SE</div>
+        <div class="nomor-urut">NO. 02</div>
+        <div class="frame-foto"><img src="calon_2.jpg" alt="Calon 02" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+02'"></div>
+        <div class="nama-calon">Dasim Sumantri, SE</div>
       </div>
     </main>
 
     <button class="btn-pilih-utama" onclick="bukaModalVerifikasi()">PILIH KANDIDAT INI</button>
   </div>
 
-
-  <!-- POP-UP 1: VERIFIKASI PEMILIHAN -->
   <div class="modal-overlay" id="modal-verifikasi">
     <div class="modal-box">
       <h2>VERIFIKASI PEMILIHAN</h2>
       <p>Anda yakin akan memilih kandidat ini?</p>
-      
-      <div class="modal-foto">
-        <img id="pop-foto" src="" alt="Foto Terpilih">
-      </div>
+      <div class="modal-foto"><img id="pop-foto" src="" alt="Terpilih"></div>
       <div class="modal-nama" id="pop-nama">-</div>
-
       <div class="modal-actions">
         <button class="btn-ulangi" onclick="tutupModalVerifikasi()">ULANGI</button>
         <button class="btn-pilih-pop" onclick="prosesSimpanSuara()">PILIH</button>
@@ -345,50 +144,24 @@
     </div>
   </div>
 
-
-  <!-- POP-UP 2: TERIMA KASIH (BERHASIL) -->
   <div class="modal-overlay" id="modal-sukses">
     <div class="modal-box">
       <div class="ceklis-icon">✅</div>
       <h2>Terima Kasih</h2>
-      <p style="font-size: 1.05rem; color: #16a34a; font-weight: bold; margin-top: 10px;">
-        Suara berhasil dikirim dan tersimpan
-      </p>
-      <button class="btn-pilih-pop" style="margin-top: 20px; width: 100%;" onclick="tampilkanBuktiMemilih()">Cetak Tanda Bukti Memilih</button>
+      <p style="color: #16a34a; font-weight: bold; margin-top: 8px;">Suara berhasil dikirim dan tersimpan</p>
+      <p style="font-size: 0.8rem; color: #6b7280; margin-top: 4px;">Halaman cetak bukti akan otomatis terbuka...</p>
     </div>
   </div>
 
-
-  <!-- STRUK TANDA BUKTI MEMILIH (Tampil Setelah Pop-Up Sukses) -->
   <div id="area-bukti">
-    <div class="bukti-header">
-      <h2>TANDA BUKTI SIMULASI MEMILIHAN</h2>
-      <p style="font-size: 0.8rem; color: #6b7280;">PILKADES KARANGSARI 2026</p>
-    </div>
-
-    <div class="bukti-row">
-      <span>Nomor Resi Suara:</span>
-      <strong id="bukti-resi">#KS-0000</strong>
-    </div>
-    <div class="bukti-row">
-      <span>Waktu Memilih:</span>
-      <span id="bukti-waktu">-</span>
-    </div>
-    <div class="bukti-row">
-      <span>Status Suara:</span>
-      <strong style="color: #16a34a;">SAH & TERREKAM</strong>
-    </div>
-
-    <div class="status-tercatat">
-      ✅ PARTISIPASI SIMULASI BERHASIL
-    </div>
-
-    <button class="btn-cetak" onclick="window.print()">🖨️ Cetak / Download PDF</button>
-    <button class="btn-kembali-awal" onclick="selesaiSimulasi()">Kembali ke Halaman Utama</button>
+    <div class="bukti-header"><h2>TANDA BUKTI SIMULASI PEMILIHAN</h2><p>PILKADES KARANGWANGI 2026</p></div>
+    <div class="bukti-row"><span>Nomor Resi Suara:</span><strong id="bukti-resi">#KW-0000</strong></div>
+    <div class="bukti-row"><span>Pilihan Kandidat:</span><strong id="bukti-pilihan">-</strong></div>
+    <div class="bukti-row"><span>Waktu Memilih:</span><span id="bukti-waktu">-</span></div>
+    <div class="bukti-row"><span>Status Suara:</span><strong style="color: #16a34a;">SAH & TERREKAM</strong></div>
+    <div class="status-tercatat">✅ PARTISIPASI SIMULASI BERHASIL</div>
   </div>
 
-
-  <!-- JAVASCRIPT -->
   <script>
     let kandidatTerpilih = null;
 
@@ -400,45 +173,34 @@
     }
 
     function bukaModalVerifikasi() {
-      if (!kandidatTerpilih) {
-        alert("Silakan klik salah satu foto kandidat terlebih dahulu!");
-        return;
+      if (!kandidatTerpilih) { 
+        alert("Silakan klik/pilih salah satu foto kandidat terlebih dahulu!"); 
+        return; 
       }
-      document.getElementById('pop-nama').innerText = `${kandidatTerpilih.nomor}. ${kandidatTerpilih.nama}`;
+      document.getElementById('pop-nama').innerText = `Nomor 0${kandidatTerpilih.nomor} - ${kandidatTerpilih.nama}`;
       document.getElementById('pop-foto').src = kandidatTerpilih.foto;
       document.getElementById('modal-verifikasi').classList.add('active');
     }
 
-    function tutupModalVerifikasi() {
-      document.getElementById('modal-verifikasi').classList.remove('active');
+    function tutupModalVerifikasi() { 
+      document.getElementById('modal-verifikasi').classList.remove('active'); 
     }
 
     function prosesSimpanSuara() {
       tutupModalVerifikasi();
       document.getElementById('modal-sukses').classList.add('active');
-    }
-
-    // TAMPILKAN STRUK TANDA BUKTI
-    function tampilkanBuktiMemilih() {
-      document.getElementById('modal-sukses').classList.remove('active');
-      document.getElementById('konten-simulasi').style.display = 'none';
-      
-      // Isi data waktu dan resi otomatis
       const sekarang = new Date();
-      const opsiWaktu = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-      document.getElementById('bukti-waktu').innerText = sekarang.toLocaleDateString('id-ID', opsiWaktu);
-      document.getElementById('bukti-resi').innerText = '#KS-' + Math.floor(100000 + Math.random() * 900000);
-
-      document.getElementById('area-bukti').style.display = 'block';
-    }
-
-    // RESET KEMBALI KE TAMPILAN AWAL
-    function selesaiSimulasi() {
-      document.getElementById('area-bukti').style.display = 'none';
-      document.getElementById('konten-simulasi').style.display = 'flex';
-      document.getElementById('card-1').classList.remove('selected');
-      document.getElementById('card-2').classList.remove('selected');
-      kandidatTerpilih = null;
+      document.getElementById('bukti-waktu').innerText = sekarang.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      document.getElementById('bukti-resi').innerText = '#KW-' + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('bukti-pilihan').innerText = `Nomor 0${kandidatTerpilih.nomor} - ${kandidatTerpilih.nama}`;
+      
+      setTimeout(() => {
+        document.getElementById('modal-sukses').classList.remove('active');
+        window.print();
+        document.getElementById('card-1').classList.remove('selected');
+        document.getElementById('card-2').classList.remove('selected');
+        kandidatTerpilih = null;
+      }, 1500);
     }
   </script>
 </body>
