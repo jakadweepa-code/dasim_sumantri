@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi Pilkades Desa Karangsari</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>PILKADES DESA KARANGSARI</h1>
+    <p>Kecamatan Binong, Kabupaten Subang — Simulasi Pemilihan</p>
+  </header>
+
+  <main class="container">
+    <h2>Silakan Pilih Calon Kepala Desa</h2>
+    <p class="subtitle">Klik pada kartu kandidat yang Anda pilih</p>
+
+    <div class="kandidat-grid">
+      <!-- Calon 1 -->
+      <div class="card" onclick="pilihKandidat('1', 'Bapak Asep Suherman', 'Calon Nomor Urut 01')">
+        <div class="nomor">01</div>
+        <img src="https://via.placeholder.com/150" alt="Foto Calon 01">
+        <h3>Bapak Asep Suherman</h3>
+        <p>Visi: Karangsari Maju & Sejahtera</p>
+      </div>
+
+      <!-- Calon 2 -->
+      <div class="card" onclick="pilihKandidat('2', 'Bapak Budi Santoso', 'Calon Nomor Urut 02')">
+        <div class="nomor">02</div>
+        <img src="https://via.placeholder.com/150" alt="Foto Calon 02">
+        <h3>Bapak Budi Santoso</h3>
+        <p>Visi: Pelayanan Cepat & Transparan</p>
+      </div>
+    </div>
+
+    <!-- Kotak Hasil Simulasi -->
+    <div id="hasil" class="hasil-box hidden">
+      <h3>✅ Pilihan Anda Terrekam!</h3>
+      <p id="teks-hasil"></p>
+      <small>Catatan: Ini hanya simulasi lokal dan bukan pemungutan suara resmi.</small>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
