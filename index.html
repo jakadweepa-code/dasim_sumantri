@@ -26,26 +26,22 @@
       max-width: 1000px; 
     }
     
-    /* AGAR KARTU TETAP BERDAMPINGAN DI LAYAR PORTRAIT */
     .surat-suara-container {
       display: flex; 
       justify-content: center; 
       align-items: center;
-      gap: 12px; 
-      flex-wrap: nowrap; /* Mencegah kartu turun ke bawah (tetap berdampingan) */
+      gap: 15px; 
+      flex-wrap: nowrap; 
       width: 100%; 
-      max-width: 600px; 
+      max-width: 700px; 
       margin: auto 0;
-      overflow-x: auto; /* Mencegah patah layout jika layar terlalu kecil */
       padding: 5px;
     }
 
     .card-kandidat {
       background: white; border: 3px solid #3b82f6; border-radius: 8px;
       padding: 8px; 
-      width: 45%; /* Menyesuaikan lebar agar pas berdampingan di layar HP kecil */
-      max-width: 180px;
-      min-width: 130px;
+      width: 190px;
       text-align: center; cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.2s ease-in-out;
     }
@@ -57,6 +53,7 @@
       padding: 3px; border-radius: 4px; margin-bottom: 6px; border: 1px solid #93c5fd;
     }
 
+    /* BINGKAI FOTO STANDAR PORTRAIT */
     .frame-foto {
       width: 100%;
       aspect-ratio: 3 / 4;
@@ -72,7 +69,24 @@
       object-position: top center;
     }
 
-    .nama-calon { font-size: 0.8rem; font-weight: bold; color: #1f2937; }
+    /* PENGATURAN KHUSUS POSISI LANDSCAPE AGAR FOTO PROPORSIONAL DAN TIDAK KEPANJANGAN */
+    @media (orientation: landscape) {
+      .card-kandidat {
+        width: 150px; /* Lebar kartu sedikit disesuaikan di mode landscape */
+      }
+      .frame-foto {
+        height: 130px; /* Membatasi tinggi bingkai agar pas di layar mendatar */
+        aspect-ratio: auto; 
+      }
+      header h1 {
+        font-size: 0.8rem; /* Ukuran teks header menyesuaikan ruang vertikal */
+      }
+      .logo-kabupaten {
+        width: 35px;
+      }
+    }
+
+    .nama-calon { font-size: 0.85rem; font-weight: bold; color: #1f2937; }
     
     .btn-pilih-utama {
       background-color: #ef4444; color: white; font-size: 1rem; font-weight: bold;
@@ -87,18 +101,18 @@
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
     .modal-box {
-      background: white; border-radius: 12px; padding: 20px; width: 90%; max-width: 350px; text-align: center;
+      background: white; border-radius: 12px; padding: 15px; width: 90%; max-width: 330px; text-align: center;
     }
     .modal-foto { 
-      width: 110px; aspect-ratio: 3 / 4; border: 2px solid #1e3a8a; 
-      margin: 0 auto 8px auto; overflow: hidden; background: #ef4444;
+      width: 100px; aspect-ratio: 3 / 4; border: 2px solid #1e3a8a; 
+      margin: 0 auto 6px auto; overflow: hidden; background: #ef4444;
     }
     .modal-foto img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-    .modal-nama { font-size: 0.95rem; font-weight: bold; color: #111827; margin-bottom: 15px; }
+    .modal-nama { font-size: 0.9rem; font-weight: bold; color: #111827; margin-bottom: 12px; }
     .modal-actions { display: flex; gap: 10px; justify-content: center; }
-    .btn-ulangi { background-color: #9ca3af; color: white; border: none; padding: 8px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
-    .btn-pilih-pop { background-color: #16a34a; color: white; border: none; padding: 8px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
-    .ceklis-icon { font-size: 3rem; color: #16a34a; margin-bottom: 8px; }
+    .btn-ulangi { background-color: #9ca3af; color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
+    .btn-pilih-pop { background-color: #16a34a; color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
+    .ceklis-icon { font-size: 2.5rem; color: #16a34a; margin-bottom: 6px; }
 
     #area-bukti { display: none; }
     @media print {
@@ -125,16 +139,16 @@
 
     <main class="surat-suara-container">
       <!-- Kandidat 1 -->
-      <div class="card-kandidat" id="card-1" onclick="pilihCard(1, 'xxxxxxxxxx', 'calon_1.jpg')">
+      <div class="card-kandidat" id="card-1" onclick="pilihCard(1, 'Soleha', 'calon_1.jpg')">
         <div class="nomor-urut">NO. 01</div>
         <div class="frame-foto"><img src="calon_1.jpg" alt="Calon 01" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+01'"></div>
-        <div class="nama-calon">xxxxxxxxxx</div>
+        <div class="nama-calon">01. Soleha</div>
       </div>
       <!-- Kandidat 2 -->
-      <div class="card-kandidat" id="card-2" onclick="pilihCard(2, 'Dasim Sumantri, SE', 'calon_2.jpg')">
+      <div class="card-kandidat" id="card-2" onclick="pilihCard(2, 'Nama Calon 02', 'calon_2.jpg')">
         <div class="nomor-urut">NO. 02</div>
         <div class="frame-foto"><img src="calon_2.jpg" alt="Calon 02" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+02'"></div>
-        <div class="nama-calon">Dasim Sumantri, SE</div>
+        <div class="nama-calon">02. Nama Calon 02</div>
       </div>
     </main>
 
@@ -158,8 +172,8 @@
     <div class="modal-box">
       <div class="ceklis-icon">✅</div>
       <h2>Terima Kasih</h2>
-      <p style="color: #16a34a; font-weight: bold; margin-top: 8px;">Suara berhasil dikirim dan tersimpan</p>
-      <p style="font-size: 0.8rem; color: #6b7280; margin-top: 4px;">Halaman cetak bukti akan otomatis terbuka...</p>
+      <p style="color: #16a34a; font-weight: bold; margin-top: 6px;">Suara berhasil dikirim dan tersimpan</p>
+      <p style="font-size: 0.75rem; color: #6b7280; margin-top: 3px;">Halaman cetak bukti akan otomatis terbuka...</p>
     </div>
   </div>
 
