@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulasi Pilkades Karangsari 2026</title>
+  <!-- Library QRCode.js untuk menghasilkan QR secara otomatis -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body, html {
@@ -53,7 +55,6 @@
       padding: 3px; border-radius: 4px; margin-bottom: 6px; border: 1px solid #93c5fd;
     }
 
-    /* BINGKAI FOTO STANDAR PORTRAIT */
     .frame-foto {
       width: 100%;
       aspect-ratio: 3 / 4;
@@ -69,21 +70,11 @@
       object-position: top center;
     }
 
-    /* PENGATURAN KHUSUS POSISI LANDSCAPE AGAR FOTO PROPORSIONAL DAN TIDAK KEPANJANGAN */
     @media (orientation: landscape) {
-      .card-kandidat {
-        width: 150px; /* Lebar kartu sedikit disesuaikan di mode landscape */
-      }
-      .frame-foto {
-        height: 130px; /* Membatasi tinggi bingkai agar pas di layar mendatar */
-        aspect-ratio: auto; 
-      }
-      header h1 {
-        font-size: 0.8rem; /* Ukuran teks header menyesuaikan ruang vertikal */
-      }
-      .logo-kabupaten {
-        width: 35px;
-      }
+      .card-kandidat { width: 150px; }
+      .frame-foto { height: 130px; aspect-ratio: auto; }
+      header h1 { font-size: 0.8rem; }
+      .logo-kabupaten { width: 35px; }
     }
 
     .nama-calon { font-size: 0.85rem; font-weight: bold; color: #1f2937; }
@@ -94,6 +85,7 @@
       width: 100%; max-width: 400px; margin-bottom: 10px;
     }
 
+    /* MODAL POP-UP */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
@@ -114,18 +106,58 @@
     .btn-pilih-pop { background-color: #16a34a; color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
     .ceklis-icon { font-size: 2.5rem; color: #16a34a; margin-bottom: 6px; }
 
-    #area-bukti { display: none; }
+    /* TAMPILAN BUKTI / QR CODE SETELAH MEMILIH */
+    #area-bukti {
+      display: none;
+      width: 100%;
+      max-width: 450px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin: auto;
+    }
+    #area-bukti h3 { font-size: 1.1rem; color: #1e3a8a; margin-bottom: 15px; }
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px solid #1e3a8a;
+      border-radius: 8px;
+      background: #fff;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .bukti-info { font-size: 0.85rem; color: #374151; margin: 15px 0; line-height: 1.4; }
+    .btn-aksi-bukti {
+      background-color: #1d4ed8; color: white; font-size: 0.95rem; font-weight: bold;
+      padding: 10px; border: none; border-radius: 6px; cursor: pointer;
+      width: 100%; margin-bottom: 8px;
+    }
+    .btn-aksi-bukti:hover { background-color: #1e40af; }
+    .btn-kembali {
+      background-color: #2563eb; color: white; font-size: 1rem; font-weight: bold;
+      padding: 12px; border: none; border-radius: 6px; cursor: pointer;
+      width: 100%; max-width: 400px; margin-top: 15px;
+    }
+    .catatan-kaki { font-size: 0.7rem; color: #6b7280; margin-top: 12px; line-height: 1.3; }
+
     @media print {
       body * { visibility: hidden; }
       #area-bukti, #area-bukti * { visibility: visible; }
-      #area-bukti { position: absolute; left: 0; top: 0; width: 100%; display: block !important; background: white; padding: 20px; text-align: center; }
-      .bukti-header { border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; margin-bottom: 15px; }
-      .bukti-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 1rem; color: #000; }
-      .status-tercatat { margin-top: 20px; font-weight: bold; color: #15803d; font-size: 1.1rem; }
+      #area-bukti {
+        position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none;
+      }
+      .btn-aksi-bukti, .btn-kembali { display: none !important; }
     }
   </style>
 </head>
 <body>
+
+  <!-- KONTEN UTAMA PILIHAN -->
   <div id="konten-simulasi">
     <header>
       <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lambang_Kabupaten_Subang.png" alt="Logo" class="logo-kabupaten" onerror="this.style.display='none'">
@@ -145,16 +177,38 @@
         <div class="nama-calon">xxxxxxxxxx</div>
       </div>
       <!-- Kandidat 2 -->
-      <div class="card-kandidat" id="card-2" onclick="pilihCard(2, 'Dasim Sumantri, SE', 'calon_2.jpg')">
+      <div class="card-kandidat" id="card-2" onclick="pilihCard(2, 'DASIM SUMANTRI, S.E', 'calon_2.jpg')">
         <div class="nomor-urut">NO. 02</div>
         <div class="frame-foto"><img src="calon_2.jpg" alt="Calon 02" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+02'"></div>
-        <div class="nama-calon">Dasim Sumantri, SE</div>
+        <div class="nama-calon">DASIM SUMANTRI, S.E</div>
       </div>
     </main>
 
     <button class="btn-pilih-utama" onclick="bukaModalVerifikasi()">PILIH KANDIDAT INI</button>
   </div>
 
+  <!-- AREA BUKTI / QR CODE (MUNCUL SETELAH SUKSES) -->
+  <div id="area-bukti">
+    <h3 id="judul-resi-nomor">Nomor urut 2</h3>
+    <h3 style="color: #1e3a8a; margin-top: -5px; margin-bottom: 10px;">QR CODE HASIL PILIHAN</h3>
+    
+    <div class="qr-container" id="qrcode"></div>
+    
+    <div class="bukti-info" id="teks-keterangan-pilihan">
+      Pilihan: -
+    </div>
+
+    <button class="btn-aksi-bukti" onclick="simpanQRCode()">SIMPAN QR CODE</button>
+    <button class="btn-aksi-bukti" style="background-color: #1d4ed8;" onclick="window.print()">🖨️ CETAK ULANG</button>
+
+    <div class="catatan-kaki">
+      QR ini hanya berisi bukti pilihan simulasi pada perangkat ini.<br>Bukan bukti suara resmi dan tidak dikirim ke server.
+    </div>
+
+    <button class="btn-kembali" onclick="kembaliKeAwal()">KEMBALI KE AWAL</button>
+  </div>
+
+  <!-- MODAL VERIFIKASI -->
   <div class="modal-overlay" id="modal-verifikasi">
     <div class="modal-box">
       <h2>VERIFIKASI PEMILIHAN</h2>
@@ -168,22 +222,14 @@
     </div>
   </div>
 
+  <!-- MODAL SUKSES -->
   <div class="modal-overlay" id="modal-sukses">
     <div class="modal-box">
       <div class="ceklis-icon">✅</div>
       <h2>Terima Kasih</h2>
       <p style="color: #16a34a; font-weight: bold; margin-top: 6px;">Suara berhasil dikirim dan tersimpan</p>
-      <p style="font-size: 0.75rem; color: #6b7280; margin-top: 3px;">Halaman cetak bukti akan otomatis terbuka...</p>
+      <p style="font-size: 0.75rem; color: #6b7280; margin-top: 3px;">Memuat tanda bukti...</p>
     </div>
-  </div>
-
-  <div id="area-bukti">
-    <div class="bukti-header"><h2>TANDA BUKTI SIMULASI PEMILIHAN</h2><p>PILKADES KARANGSARI 2026</p></div>
-    <div class="bukti-row"><span>Nomor Resi Suara:</span><strong id="bukti-resi">#KW-0000</strong></div>
-    <div class="bukti-row"><span>Pilihan Kandidat:</span><strong id="bukti-pilihan">-</strong></div>
-    <div class="bukti-row"><span>Waktu Memilih:</span><span id="bukti-waktu">-</span></div>
-    <div class="bukti-row"><span>Status Suara:</span><strong style="color: #16a34a;">SAH & TERREKAM</strong></div>
-    <div class="status-tercatat">✅ PARTISIPASI SIMULASI BERHASIL</div>
   </div>
 
   <script>
@@ -213,18 +259,46 @@
     function prosesSimpanSuara() {
       tutupModalVerifikasi();
       document.getElementById('modal-sukses').classList.add('active');
+
       const sekarang = new Date();
-      document.getElementById('bukti-waktu').innerText = sekarang.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-      document.getElementById('bukti-resi').innerText = '#KW-' + Math.floor(100000 + Math.random() * 900000);
-      document.getElementById('bukti-pilihan').innerText = `Nomor 0${kandidatTerpilih.nomor} - ${kandidatTerpilih.nama}`;
-      
+      const opsiWaktu = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const waktuStr = sekarang.toLocaleDateString('id-ID', opsiWaktu).replace(/\./g, ':'); // Format tanggal dan waktu
+
       setTimeout(() => {
         document.getElementById('modal-sukses').classList.remove('active');
-        window.print();
-        document.getElementById('card-1').classList.remove('selected');
-        document.getElementById('card-2').classList.remove('selected');
-        kandidatTerpilih = null;
+        
+        // Sembunyikan halaman pemilihan, tampilkan halaman bukti QR Code
+        document.getElementById('konten-simulasi').style.display = 'none';
+        document.getElementById('area-bukti').style.display = 'block';
+
+        // Set teks informasi pilihan
+        document.getElementById('judul-resi-nomor').innerText = `Nomor urut ${kandidatTerpilih.nomor}`;
+        document.getElementById('teks-keterangan-pilihan').innerText = `Pilihan: ${kandidatTerpilih.nama} | ${waktuStr}`;
+
+        // Generate QR Code otomatis
+        document.getElementById('qrcode').innerHTML = ""; // Bersihkan QR sebelumnya
+        new QRCode(document.getElementById("qrcode"), {
+          text: `BUKTI PILKADES 2026 - No.${kandidatTerpilih.nomor} (${kandidatTerpilih.nama}) - Waktu: ${waktuStr}`,
+          width: 180,
+          height: 180
+        });
+
       }, 1500);
+    }
+
+    function simpanQRCode() {
+      alert("Tangkapan layar atau cetak bukti dapat digunakan untuk menyimpan QR Code pilihan Anda.");
+      window.print();
+    }
+
+    function kembaliKeAwal() {
+      // Reset semua pilihan & kembali ke halaman utama
+      for (let i = 1; i <= 2; i++) {
+        document.getElementById(`card-${i}`).classList.remove('selected');
+      }
+      kandidatTerpilih = null;
+      document.getElementById('area-bukti').style.display = 'none';
+      document.getElementById('konten-simulasi').style.display = 'flex';
     }
   </script>
 </body>
