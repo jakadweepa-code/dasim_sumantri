@@ -18,14 +18,35 @@
       width: 100%; height: 100%; display: flex; flex-direction: column;
       justify-content: space-between; align-items: center; padding: 10px;
     }
-    header { text-align: center; margin-top: 5px; }
-    .logo-kabupaten { width: 45px; height: auto; margin-bottom: 2px; }
-    header h1 { 
-      font-size: 0.9rem; 
-      font-weight: bold; 
-      color: #1e3a8a; 
-      line-height: 1.3; 
-      max-width: 1000px; 
+    header {
+      width: 100%;
+      max-width: 1000px;
+      text-align: center;
+      margin-top: 8px;
+      padding: 6px 10px;
+    }
+    .header-tengah {
+      width: 100%;
+      text-align: center;
+    }
+    .logo-kabupaten {
+      width: 48px;
+      height: auto;
+      margin-bottom: 6px;
+    }
+    .judul-surat-suara {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #2563eb;
+      letter-spacing: 0.6px;
+      margin-bottom: 3px;
+    }
+    header h1 {
+      font-size: 0.88rem;
+      font-weight: bold;
+      color: #1f2937;
+      line-height: 1.35;
+      margin: 0 auto;
     }
     
     .surat-suara-container {
@@ -200,13 +221,15 @@
   <!-- KONTEN UTAMA PILIHAN -->
   <div id="konten-simulasi">
     <header>
-      <img src="lambang_kabupaten_subang.png" alt="Logo" class="logo-kabupaten" onerror="this.style.display='none'">
-      <h1>
-        SURAT SUARA<br>
-        PEMILIHAN KEPALA DESA KARANGSARI<br>
-        KECAMATAN BINONG KABUPATEN SUBANG<br>
-        TAHUN 2026
-      </h1>
+      <div class="header-tengah">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lambang_Kabupaten_Subang.png" alt="Logo" class="logo-kabupaten" onerror="this.style.display='none'">
+        <div class="judul-surat-suara">SURAT SUARA</div>
+        <h1>
+          PEMILIHAN KEPALA DESA KARANGSARI<br>
+          KECAMATAN BINONG KABUPATEN SUBANG<br>
+          TAHUN 2026
+        </h1>
+      </div>
     </header>
 
     <main class="surat-suara-container">
