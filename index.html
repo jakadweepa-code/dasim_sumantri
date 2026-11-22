@@ -80,7 +80,7 @@
     .nama-calon { font-size: 0.85rem; font-weight: bold; color: #1f2937; }
     
     .btn-pilih-utama {
-      background-color: #ef4444; color: white; font-size: 1rem; font-weight: bold;
+      background-color: #1e3a8a; color: white; font-size: 1rem; font-weight: bold;
       padding: 10px; border: none; border-radius: 6px; cursor: pointer;
       width: 100%; max-width: 400px; margin-bottom: 10px;
     }
@@ -102,8 +102,8 @@
     .modal-foto img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
     .modal-nama { font-size: 0.9rem; font-weight: bold; color: #111827; margin-bottom: 12px; }
     .modal-actions { display: flex; gap: 10px; justify-content: center; }
-    .btn-ulangi { background-color: #9ca3af; color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
-    .btn-pilih-pop { background-color: #16a34a; color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
+    .btn-ulangi { background-color: #ef4444; color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
+    .btn-pilih-pop { background-color: #1e3a8a; color: white; border: none; padding: 6px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; flex: 1; }
     .ceklis-icon { font-size: 2.5rem; color: #16a34a; margin-bottom: 6px; }
 
     /* TAMPILAN BUKTI / QR CODE SETELAH MEMILIH */
@@ -177,10 +177,10 @@
         <div class="nama-calon">xxxxxxxxxx</div>
       </div>
       <!-- Kandidat 2 -->
-      <div class="card-kandidat" id="card-2" onclick="pilihCard(2, 'DASIM SUMANTRI, S.E', 'calon_2.jpg')">
+      <div class="card-kandidat" id="card-2" onclick="pilihCard(2, 'Dasim Sumantri, SE', 'calon_2.jpg')">
         <div class="nomor-urut">NO. 02</div>
         <div class="frame-foto"><img src="calon_2.jpg" alt="Calon 02" onerror="this.src='https://via.placeholder.com/150/ef4444/ffffff?text=Calon+02'"></div>
-        <div class="nama-calon">DASIM SUMANTRI, S.E</div>
+        <div class="nama-calon">Dasim Sumantri, SE</div>
       </div>
     </main>
 
@@ -211,7 +211,7 @@
   <!-- MODAL VERIFIKASI -->
   <div class="modal-overlay" id="modal-verifikasi">
     <div class="modal-box">
-      <h2>VERIFIKASI PEMILIHAN</h2>
+      <h2>KONFIRMASI PEMILIHAN</h2>
       <p>Anda yakin akan memilih kandidat ini?</p>
       <div class="modal-foto"><img id="pop-foto" src="" alt="Terpilih"></div>
       <div class="modal-nama" id="pop-nama">-</div>
